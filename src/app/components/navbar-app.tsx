@@ -22,21 +22,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useLoginUser } from "@/stores/user";
 import { getLoginUserUsingGet, userLogoutUsingPost } from "@/api/userController";
-import TabsApp from "./tabs-app";
-
+import Link from 'next/link'
 export default function NavbarApp() {
   const navItems = [
     {
-      name: "Features",
-      link: "#features",
+      name: "主页",
+      link: "/",
     },
     {
-      name: "Pricing",
-      link: "#pricing",
-    },
+      name: "图片管理",
+      link: "/page/picture/manage-picture-page", // 改为实际路由路径
+      },
+  {
+  name: "创建图片",
+  link: "/page/picture/add-picture-page", // 改为实际路由路径
+  },
     {
-      name: "Contact",
-      link: "#contact",
+      name: "用户管理",
+      link: "/user/user-management-page",
     },
   ];
 
@@ -111,16 +114,33 @@ export default function NavbarApp() {
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
           >
-            {navItems.map((item, idx) => (
-              <a
-                key={`mobile-link-${idx}`}
-                href={item.link}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-neutral-600 dark:text-neutral-300"
-              >
-                <span className="block">{item.name}</span>
-              </a>
-            ))}
+            {navItems.map((item, idx) => {
+              const isInternal = item.link.startsWith('/') && !item.link.startsWith('//');
+              
+              if (isInternal) {
+                return (
+                  <Link
+                    key={`mobile-link-${idx}`}
+                    href={item.link}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="relative text-neutral-600 dark:text-neutral-300"
+                  >
+                    <span className="block">{item.name}</span>
+                  </Link>
+                );
+              }
+              
+              return (
+                <a
+                  key={`mobile-link-${idx}`}
+                  href={item.link}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="relative text-neutral-600 dark:text-neutral-300"
+                >
+                  <span className="block">{item.name}</span>
+                </a>
+              );
+            })}
             <div className="flex w-full flex-col gap-4">
               {loginUser.userName !== '未登录' ? (
                 <DropdownMenu>
@@ -158,14 +178,10 @@ export default function NavbarApp() {
           </MobileNavMenu>
         </MobileNav>
       </Navbar>
-      <div className="w-full absolute top-40 left-100">
-            <TabsApp />
-      </div>
 
       <Modal isOpen={isLoginModalOpen} onClose={closeLoginModal}>
         <SignupFormApp onLoginSuccess={closeLoginModal} />
       </Modal>
-      {/* Navbar */}
     </div>
   );
 }

@@ -1,10 +1,9 @@
-import NavbarApp  from "@/app/components/navbar-app";
+import TabsApp from "@/app/components/tabs-app";
 
 export default function Home() {
   return (
-   <div>
-    <NavbarApp/>
-   </div>
-    
+    <div className="w-full flex justify-center items-center pt-20">
+      <TabsApp />
+    </div>
   );
 }
